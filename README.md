@@ -6,20 +6,29 @@ You're managing an EC2 instance and accidentally **lose your SSH key**. Terminat
 
 ---
 
+## 🏗️ Architecture Diagram
+
+<img src="/ec2-assets/ec2-lost-key-recover-architecture.svg" alt="Architecture Diagram"/>
+
+---
+
 ## 📚 Table of Contents
 
-1. [📘 Summary](#-Summary)  
-2. [🛡️ Prerequisites](#️-prerequisites)  
-3. [🖥️ Step-by-Step Guide](#️-step-by-step-guide)  
+1. [📘 Summary](#-Summary)
+2. [🏗️ Architecture Diagram](#-architecture-diagram)
+3. [🛡️ Prerequisites](#️-prerequisites)  
+4. [🖥️ Step-by-Step Guide](#️-step-by-step-guide)  
     - [🔹 Step 1: Stop the Affected EC2 Instance](#-step-1-stop-the-affected-ec2-instance)  
     - [🔹 Step 2: Detach the Root Volume](#-step-2-detach-the-root-volume)  
     - [🔹 Step 3: Attach Volume to Helper Instance](#-step-3-attach-volume-to-helper-instance)  
     - [🔹 Step 4: Modify the `authorized_keys` File](#-step-4-modify-the-authorized_keys-file)  
     - [🔹 Step 5: Detach and Reattach the Volume Back](#-step-5-detach-and-reattach-the-volume-back)  
     - [🔹 Step 6: Start the Original EC2 Instance](#-step-6-start-the-original-ec2-instance)  
-4. [✅ Validation](#-validation)  
-5. [🧠 Key Learnings](#-key-learnings)  
-6. [📸 Screenshots (Evidence)](#-screenshots-evidence)
+5. [✅ Validation](#-validation)  
+6. [🧠 Key Learnings](#-key-learnings)  
+7. [📸 Screenshots (Evidence)](#-screenshots-evidence)
+8. [📝 Note](#-note)
+9. [🔚 Conclusion](#-conclusion)
 
 ---
 
@@ -180,5 +189,24 @@ If you successfully connect to the instance without errors, then 🎉 **Congratu
 #### 6. **SSH Access Restored Successfully**  
 ![SSH Access Restored](ec2-assets/mount-and-test-cli.png)  
 *This screenshot shows successful SSH access restored using the new key to the original EC2 instance.*
+
+---
+
+
+### 📝 Note  
+If a **helper instance** is not available, create a new EC2 instance in the **same Availability Zone** as the affected instance. Launch it with a **new key pair** and ensure it has the necessary security group access (e.g., port 22 open for SSH). This instance will temporarily be used to **mount and recover the lost volume**.
+
+---
+
+### 🔚 Conclusion  
+Recovering a lost SSH key from an EC2 instance is fully possible **without data loss**, using the volume reattachment technique. This method involves:
+
+- Stopping the affected instance  
+- Detaching and mounting its volume to a helper instance  
+- Editing the `authorized_keys` file  
+- Reattaching the volume  
+- Regaining access with a new key pair  
+
+By practicing this process, you’ll gain confidence in **real-world troubleshooting and disaster recovery** on AWS. 🔐🛠️
 
 ---
